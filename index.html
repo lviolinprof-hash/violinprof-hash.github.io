@@ -439,6 +439,21 @@
     </div>
 
     <form id="formReservation" onsubmit="event.preventDefault(); envoyerFormulaire();">
+      function enviarRespaldo() {
+    // Abre WhatsApp con los datos del formulario
+    const nom = document.getElementById('nom').value.trim();
+    const telefono = document.getElementById('telephone').value.trim();
+    
+    if (!nom || !telefono) {
+        alert('❌ El nombre y teléfono son obligatorios');
+        return;
+    }
+    
+    // WhatsApp con mensaje predefinido
+    const mensaje = `Bonjour, je suis ${nom}. Je souhaite réserver mon cours d'essai de violon. 🎻`;
+    const url = `https://wa.me/33783931284?text=${encodeURIComponent(mensaje)}`;
+    window.open(url, '_blank');
+}
       
       <h3 style="font-family: 'Fahkwang', sans-serif; font-weight: 600; color: #0B5159; text-align: center; margin-bottom: 25px; font-size: 1.3rem;">
         📝 Réservez votre cours d'essai gratuit
