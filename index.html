@@ -641,7 +641,7 @@
 <!-- JAVASCRIPT -->
 <script>
   // ⚠️ IMPORTANTE: Reemplaza esta URL con la de tu script de Apps Script
-  const API_URL = "https://script.google.com/macros/s/AKfycbyWU-pAX3b9Tl_g4K_rdQaS9qol9eaaRWkCoGoiz-a6_FVYwp7uIRBd6wYyAFzmifBwqw/exec";
+  const API_URL = "https://script.google.com/macros/s/AKfycbx1c57ppg2gRldObaJ5uDL60tsSyI4GP8zdd1X_VnkBFBJJ8lH6w4Z572q8Q1cCj6g/exec";
 
   async function envoyerReserva() {
     const messageDiv = document.getElementById('messageReserva');
@@ -677,25 +677,31 @@
     messageDiv.style.display = 'block';
 
     try {
-      // ✅ CAMBIO CLAVE: mode: 'no-cors' para evitar bloqueos
+      // ✅ IMPORTANT : 'text/plain' évite le préflight CORS (OPTIONS) que
+      // Google Apps Script ne sait pas gérer, et permet de lire la vraie réponse.
       const response = await fetch(API_URL, {
         method: 'POST',
-        mode: 'no-cors',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'text/plain;charset=utf-8',
         },
         body: JSON.stringify(donnees)
       });
 
-      // Con 'no-cors' no podemos leer la respuesta, pero los datos se guardan igual
-      messageDiv.className = 'success';
-      messageDiv.textContent = '✅ Réservation envoyée ! Nous vous confirmerons le créneau par email ou téléphone sous 24h.';
-      document.getElementById('formReserva').reset();
+      const resultat = await response.json();
+
+      if (resultat.succes) {
+        messageDiv.className = 'success';
+        messageDiv.textContent = '✅ Réservation envoyée ! Nous vous confirmerons le créneau par email ou téléphone sous 24h.';
+        document.getElementById('formReserva').reset();
+      } else {
+        messageDiv.className = 'error';
+        messageDiv.textContent = '❌ ' + (resultat.message || "Une erreur est survenue, veuillez réessayer.");
+      }
 
     } catch (error) {
       console.error('Erreur détaillée:', error);
       messageDiv.className = 'error';
-      messageDiv.textContent = '❌ Erreur de connexion. Vérifiez votre connexion internet.';
+      messageDiv.textContent = '❌ Erreur de connexion. Vérifiez votre connexion internet ou réessayez plus tard.';
     }
 
     btn.disabled = false;
