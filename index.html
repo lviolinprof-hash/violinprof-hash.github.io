@@ -592,7 +592,7 @@
   </div>
 </section>
 
-<!-- CTA FINAL (opcional, con botones WhatsApp/Messenger) -->
+<!-- CTA FINAL: WhatsApp y Messenger -->
 <section class="final reveal" style="padding:40px 0;">
   <div class="wrap" style="text-align:center;">
     <p style="color:var(--on-dark-soft); font-size:1.1rem; margin-bottom:20px;">
@@ -640,14 +640,14 @@
 
 <!-- JAVASCRIPT -->
 <script>
-  // ✅ URL de tu Apps Script (debes reemplazarla por la tuya)
-  const API_URL = "https://script.google.com/macros/s/AKfycbzMbAiFTKsDZyDnxOQiHFFMKBiy2W2jfSNxdwRQc2lbaCHK74-I4Of3LpBy6Q0XNUuf/exec";
+  // ⚠️ IMPORTANTE: Reemplaza esta URL con la de tu script de Apps Script
+  const API_URL = "https://script.google.com/macros/s/TU_URL_DE_APPS_SCRIPT/exec";
 
-  // Función para enviar el formulario de reserva
   async function envoyerReserva() {
     const messageDiv = document.getElementById('messageReserva');
     const btn = document.querySelector('.btn-submit-reserva');
 
+    // Los nombres coinciden EXACTAMENTE con el script de Apps Script
     const donnees = {
       nom: document.getElementById('nomReserva').value.trim(),
       email: document.getElementById('emailReserva').value.trim(),
@@ -671,7 +671,6 @@
       return;
     }
 
-    // Deshabilitar botón y mostrar loading
     btn.disabled = true;
     btn.textContent = '⏳ Envoi en cours...';
     messageDiv.className = 'loading';
@@ -681,11 +680,14 @@
     try {
       const response = await fetch(API_URL, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+        },
         body: JSON.stringify(donnees)
       });
 
       if (response.ok) {
+        const result = await response.json();
         messageDiv.className = 'success';
         messageDiv.textContent = '✅ Réservation envoyée ! Nous vous confirmerons le créneau par email ou téléphone sous 24h.';
         document.getElementById('formReserva').reset();
@@ -694,13 +696,13 @@
         messageDiv.className = 'error';
         messageDiv.textContent = '❌ Erreur: ' + (errorText || 'Veuillez réessayer.');
       }
+
     } catch (error) {
-      console.error('Erreur:', error);
+      console.error('Erreur détaillée:', error);
       messageDiv.className = 'error';
       messageDiv.textContent = '❌ Erreur de connexion. Vérifiez votre connexion internet.';
     }
 
-    // Restaurar botón
     btn.disabled = false;
     btn.textContent = '📅 Réserver mon cours d\'essai';
   }
