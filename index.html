@@ -24,6 +24,9 @@
       --on-dark-soft:#BFDEDF;
       --on-dark-faint:#8FB9BB;
       --max:1100px;
+      --messenger-blue:#0084FF;
+      --messenger-blue-dark:#0063CC;
+      --whatsapp-green:#25D366;
     }
     *{ box-sizing:border-box; }
     html{ scroll-behavior:smooth; }
@@ -146,27 +149,6 @@
     summary .plus{ font-family:'Fahkwang',sans-serif; font-size:1.4rem; color:var(--gold); transition:transform .2s ease; }
     details[open] summary .plus{ transform:rotate(45deg); }
     details p{ margin:14px 0 0; color:var(--ink-soft); line-height:1.6; font-size:.98rem; }
-    .form-section{ background:var(--paper); padding:60px 20px; }
-    .form-section .wrap { max-width: 600px; }
-    .form-section h2 { color: var(--teal-950); text-align: center; margin-bottom: 20px; }
-    .form-group { margin-bottom: 18px; }
-    .form-group label { display: block; font-weight: 600; margin-bottom: 5px; color: #0B5159; font-size: 0.92rem; }
-    .form-group input, .form-group select {
-      width: 100%; padding: 12px 14px; border: 1.5px solid #D3E7E7; border-radius: 6px;
-      box-sizing: border-box; font-size: 0.98rem; background: white; font-family: 'Public Sans', sans-serif;
-    }
-    .form-group input:focus, .form-group select:focus { outline: none; border-color: #E7C80B !important; box-shadow: 0 0 0 3px rgba(231, 200, 11, 0.15); }
-    .btn-submit-form {
-      background: #E7C80B; color: #062C31; border: none; padding: 16px 30px;
-      font-weight: 700; border-radius: 6px; cursor: pointer; width: 100%;
-      font-size: 1.1rem; margin-top: 10px; font-family: 'Fahkwang', sans-serif;
-      transition: background 0.2s ease;
-    }
-    .btn-submit-form:hover { background: #F3DC4E; }
-    #messageReservation { margin-top: 18px; padding: 12px 16px; border-radius: 6px; display: none; text-align: center; font-weight: 500; font-size: 0.95rem; }
-    #messageReservation.success { background: #d4edda; color: #155724; display: block; }
-    #messageReservation.error { background: #f8d7da; color: #721c24; display: block; }
-    #messageReservation.loading { background: #fff3cd; color: #856404; display: block; }
     .final{
       background: radial-gradient(120% 160% at 85% 110%, var(--teal-700) 0%, var(--teal-950) 60%);
       color:var(--on-dark);
@@ -181,6 +163,8 @@
     .wa-card .wa-eyebrow{ font-size:.82rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gold-light); margin-bottom:12px; }
     .wa-card h3{ color:var(--on-dark); font-size:1.5rem; margin-bottom:10px; }
     .wa-card p{ color:var(--on-dark-soft); font-size:.98rem; line-height:1.55; margin:0 0 26px; }
+
+    /* --- BOTONES DE WHATSAPP --- */
     .btn-whatsapp{
       display:inline-flex;
       align-items:center;
@@ -200,7 +184,7 @@
     }
     .btn-whatsapp:hover{ background:var(--gold-light); transform:translateY(-1px); }
     .btn-whatsapp svg{ width:20px; height:20px; flex-shrink:0; }
-    .wa-note{ font-size:.8rem; color:var(--on-dark-faint); margin-top:14px; }
+
     .btn-whatsapp-inline{
       display:inline-flex;
       align-items:center;
@@ -220,6 +204,109 @@
     }
     .btn-whatsapp-inline:hover{ background:var(--gold-light); transform:translateY(-1px); }
     .btn-whatsapp-inline svg{ width:19px; height:19px; flex-shrink:0; }
+
+    /* --- BOTONES DE MESSENGER --- */
+    .btn-messenger{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      background:var(--messenger-blue);
+      color:white;
+      border:none;
+      padding:16px 20px;
+      font-weight:700;
+      font-size:1.02rem;
+      border-radius:5px;
+      cursor:pointer;
+      text-decoration:none;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .btn-messenger:hover{ background:var(--messenger-blue-dark); transform:translateY(-1px); }
+    .btn-messenger svg{ width:20px; height:20px; flex-shrink:0; }
+
+    .btn-messenger-inline{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      background:var(--messenger-blue);
+      color:white;
+      border:none;
+      padding:15px 26px;
+      font-weight:700;
+      font-size:1rem;
+      font-family:'Fahkwang',sans-serif;
+      border-radius:5px;
+      cursor:pointer;
+      text-decoration:none;
+      transition: background .2s ease, transform .2s ease;
+    }
+    .btn-messenger-inline:hover{ background:var(--messenger-blue-dark); transform:translateY(-1px); }
+    .btn-messenger-inline svg{ width:19px; height:19px; flex-shrink:0; }
+
+    .btn-group{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    /* --- BOTONES FLOTANTES --- */
+    .float-container{
+      position:fixed;
+      bottom:22px;
+      right:22px;
+      z-index:999;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:flex-end;
+    }
+
+    .wa-float, .msg-float{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:50px;
+      text-decoration:none;
+      font-family:'Fahkwang',sans-serif;
+      font-weight:600;
+      font-size:.92rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.22);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .wa-float{
+      background:var(--gold);
+      color:var(--teal-950);
+    }
+    .wa-float:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(0,0,0,.28);
+      background:var(--gold-light);
+    }
+    .wa-float svg{ width:22px; height:22px; flex-shrink:0; color:var(--teal-950); }
+
+    .msg-float{
+      background:var(--messenger-blue);
+      color:white;
+    }
+    .msg-float:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(0,0,0,.28);
+      background:var(--messenger-blue-dark);
+    }
+    .msg-float svg{ width:22px; height:22px; flex-shrink:0; color:white; }
+
+    .float-label{ white-space:nowrap; }
+
+    @media(max-width:520px){
+      .float-label{ display:none; }
+      .wa-float, .msg-float{ padding:14px; border-radius:50%; }
+    }
+
     .wa-inline-block{
       margin-top:34px;
       display:flex;
@@ -231,39 +318,6 @@
     .wa-inline-note{ font-size:.85rem; color:var(--ink-soft); }
     .peg-section .wa-inline-note,
     .peg-section .wa-inline-block{ color:var(--on-dark-soft); }
-
-    /* --- BOTÓN FLOTANTE AMARILLO --- */
-    .wa-float{
-      position:fixed;
-      bottom:22px;
-      right:22px;
-      z-index:999;
-      display:inline-flex;
-      align-items:center;
-      gap:10px;
-      background:var(--gold);
-      color:var(--teal-950);
-      padding:14px 20px;
-      border-radius:50px;
-      text-decoration:none;
-      font-family:'Fahkwang',sans-serif;
-      font-weight:600;
-      font-size:.92rem;
-      box-shadow: 0 8px 24px rgba(0,0,0,.22);
-      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
-    }
-    .wa-float:hover{
-      transform:translateY(-2px);
-      box-shadow:0 12px 28px rgba(0,0,0,.28);
-      background:var(--gold-light);
-    }
-    .wa-float svg{ width:22px; height:22px; flex-shrink:0; color:var(--teal-950); }
-    .wa-float .wa-float-label{ white-space:nowrap; }
-
-    @media(max-width:520px){
-      .wa-float .wa-float-label{ display:none; }
-      .wa-float{ padding:14px; border-radius:50%; }
-    }
 
     footer{ background:var(--teal-950); color:var(--on-dark-faint); padding:34px 0; font-size:.86rem; text-align:center; }
 
@@ -305,11 +359,19 @@
         <button class="btn-primary" onclick="document.getElementById('reserver').scrollIntoView({behavior:'smooth'})">
           Réserver mon cours d'essai gratuit
         </button>
+      </div>
+      <div class="btn-group" style="margin-top:16px; max-width:400px;">
         <a class="btn-whatsapp-inline" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.86 7.86 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.24 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.68Zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.19-.5.64-.62.78-.11.13-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4.09-.1.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.19-.68.66-.68 1.62s.7 1.88.8 2.01c.1.13 1.38 2.1 3.34 2.94.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23Z"/>
           </svg>
           Réserver par WhatsApp
+        </a>
+        <a class="btn-messenger-inline" href="https://m.me/61550080681411?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+          </svg>
+          Réserver par Messenger
         </a>
       </div>
       <p class="micro-trust" style="margin-top:16px;">
@@ -341,6 +403,14 @@
       au lieu de la répéter 40 fois par réflexe.
     </p>
     <p>Résultat : pas deux ans à répéter des comptines. <mark>Un vrai morceau reconnaissable dès votre deuxième cours.</mark></p>
+    <div class="btn-group" style="max-width:400px; margin-top:20px;">
+      <a class="btn-messenger-inline" href="https://m.me/61550080681411?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:19px;height:19px;">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+        </svg>
+        Réserver par Messenger
+      </a>
+    </div>
   </div>
 </section>
 
@@ -366,6 +436,14 @@
         <span class="peg-tag win">Vous y êtes</span>
       </div>
     </div>
+    <div class="btn-group" style="max-width:400px; margin:30px auto 0;">
+      <a class="btn-messenger-inline" href="https://m.me/61550080681411?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:19px;height:19px;">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+        </svg>
+        Réserver par Messenger
+      </a>
+    </div>
   </div>
 </section>
 
@@ -387,6 +465,14 @@
         <p class="text">« Personne ne m'a demandé si j'avais fait du solfège enfant. On a juste commencé, tout de suite. »</p>
         <div class="who">Sophie, 36 ans — élève depuis 5 mois</div>
       </div>
+    </div>
+    <div class="btn-group" style="max-width:400px; margin:30px auto 0;">
+      <a class="btn-messenger-inline" href="https://m.me/61550080681411?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:19px;height:19px;">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+        </svg>
+        Réserver par Messenger
+      </a>
     </div>
   </div>
 </section>
@@ -416,6 +502,14 @@
       <summary>Où se déroulent les cours ? <span class="plus">+</span></summary>
       <p>Les cours peuvent avoir lieu à votre domicile ou dans le nôtre, avec un professeur. Des cours en ligne sont également possibles. Les cours en petit groupe ou en individuel sont proposés selon les disponibilités.</p>
     </details>
+    <div class="btn-group" style="max-width:400px; margin:30px auto 0;">
+      <a class="btn-messenger-inline" href="https://m.me/61550080681411?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:19px;height:19px;">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+        </svg>
+        Réserver par Messenger
+      </a>
+    </div>
   </div>
 </section>
 
@@ -430,124 +524,30 @@
         <li>Cours d'essai 100% gratuit, à votre domicile ou dans le nôtre</li>
         <li>Violon fourni pour le premier cours</li>
         <li>Un vrai morceau joué dès le 2ᵉ cours</li>
-        <li>Réponse sous 24h, directement par WhatsApp</li>
+        <li>Réponse sous 24h</li>
       </ul>
     </div>
 
     <div class="wa-card">
-      <div class="wa-eyebrow">Réservation rapide</div>
-      <h3>Écrivez-nous sur WhatsApp</h3>
+      <div class="wa-eyebrow">Choisissez votre canal</div>
+      <h3>Réservez en 1 clic</h3>
       <p>Un message, votre créneau préféré, et c'est réservé.</p>
-      <a class="btn-whatsapp" id="wa-link" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
-        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-          <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.86 7.86 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.24 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.68Zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.19-.5.64-.62.78-.11.13-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4.09-.1.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.19-.68.66-.68 1.62s.7 1.88.8 2.01c.1.13 1.38 2.1 3.34 2.94.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23Z"/>
-        </svg>
-        Réserver mon cours d'essai gratuit par WhatsApp
-      </a>
-      <p class="wa-note">Ou répondez directement au message que vous avez reçu sur WhatsApp / dans le formulaire Meta.</p>
-    </div>
-  </div>
-</section>
-
-<!-- FORMULARIO -->
-<section class="form-section reveal" id="reservation-auto">
-  <div class="wrap">
-
-    <div style="display: flex; align-items: center; justify-content: center; gap: 20px; margin-bottom: 30px;">
-      <hr style="flex: 1; border: none; border-top: 2px solid #D3E7E7;" />
-      <span style="font-family: 'Fahkwang', sans-serif; font-weight: 600; color: #0B5159; font-size: 0.95rem; white-space: nowrap; text-align: center;">
-        🎻 ou si vous préférez, réservez via ce formulaire
-      </span>
-      <hr style="flex: 1; border: none; border-top: 2px solid #D3E7E7;" />
-    </div>
-
-    <form id="formReservation" onsubmit="event.preventDefault(); envoyerFormulaire();">
-
-      <h3 style="font-family: 'Fahkwang', sans-serif; font-weight: 600; color: #0B5159; text-align: center; margin-bottom: 25px; font-size: 1.3rem;">
-        📝 Réservez votre cours d'essai gratuit
-      </h3>
-
-      <div class="form-group">
-        <label>Nom complet <span style="color: #E7C80B;">*</span></label>
-        <input id="nom" type="text" placeholder="Ex: Nathalie Dupont" required />
-      </div>
-
-      <div class="form-group">
-        <label>Téléphone <span style="color: #E7C80B;">*</span></label>
-        <input id="telephone" type="tel" placeholder="Ex: 33783931284" required />
-        <small style="color: #4C7E82; font-size: 0.75rem; display: block; margin-top: 3px;">📱 Avec indicatif pays (ex: 33 pour la France)</small>
-      </div>
-
-      <div class="form-group">
-        <label>Email</label>
-        <input id="email" type="email" placeholder="Ex: nathalie@email.com" />
-      </div>
-
-      <div class="form-group">
-        <label>Âge</label>
-        <input id="age" type="number" placeholder="Ex: 53" />
-      </div>
-
-      <div class="form-group">
-        <label>Niveau</label>
-        <select id="niveau">
-          <option value="Débutant">🎵 Débutant</option>
-          <option value="Intermédiaire">🎶 Intermédiaire</option>
-          <option value="Avancé">🎻 Avancé</option>
-        </select>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-        <div class="form-group">
-          <label>Date souhaitée</label>
-          <input id="date" type="date" />
-        </div>
-        <div class="form-group">
-          <label>Heure souhaitée</label>
-          <input id="heure" type="time" />
-        </div>
-      </div>
-
-      <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-        <div class="form-group">
-          <label>Type</label>
-          <select id="type">
-            <option value="domicile">🏠 À domicile</option>
-            <option value="studio">🎵 Au studio</option>
-          </select>
-        </div>
-        <div class="form-group">
-          <label>Modalité</label>
-          <select id="modalite">
-            <option value="presentiel">🤝 Présentiel</option>
-            <option value="en_ligne">💻 En ligne</option>
-          </select>
-        </div>
-      </div>
-
-      <button type="submit" class="btn-submit-form">📅 Réserver mon cours d'essai</button>
-
-      <div id="messageReservation"></div>
-
-      <p style="text-align: center; font-size: 0.82rem; color: #8FB9BB; margin-top: 16px; line-height: 1.6;">
-        💬 <strong>Réponse sous 24h</strong> · Cours offert · Sans engagement
-      </p>
-
-      <div style="display:flex; align-items:center; gap:14px; margin-top:22px;">
-        <hr style="flex:1; border:none; border-top:1.5px solid #D3E7E7;" />
-        <span style="font-size:.85rem; color:#4C7E82;">ou</span>
-        <hr style="flex:1; border:none; border-top:1.5px solid #D3E7E7;" />
-      </div>
-      <div class="wa-inline-block">
-        <a class="btn-whatsapp-inline" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
+      <div class="btn-group">
+        <a class="btn-whatsapp" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.86 7.86 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.24 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.68Zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.19-.5.64-.62.78-.11.13-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4.09-.1.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.19-.68.66-.68 1.62s.7 1.88.8 2.01c.1.13 1.38 2.1 3.34 2.94.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23Z"/>
           </svg>
-          Réserver mon cours d'essai gratuit par WhatsApp
+          Réserver par WhatsApp
+        </a>
+        <a class="btn-messenger" href="https://m.me/61550080681411?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+            <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+          </svg>
+          Réserver par Messenger
         </a>
       </div>
-
-    </form>
+      <p class="wa-note">Réponse sous 24h, sans engagement.</p>
+    </div>
   </div>
 </section>
 
@@ -558,68 +558,24 @@
   </div>
 </footer>
 
-<!-- BOTÓN FLOTANTE AMARILLO (visible siempre) -->
-<a class="wa-float" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener" aria-label="Réserver mon cours d'essai gratuit par WhatsApp">
-  <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-    <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.86 7.86 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.24 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.68Zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.19-.5.64-.62.78-.11.13-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4.09-.1.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.19-.68.66-.68 1.62s.7 1.88.8 2.01c.1.13 1.38 2.1 3.34 2.94.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23Z"/>
-  </svg>
-  <span class="wa-float-label">Réserver par WhatsApp</span>
-</a>
+<!-- BOTONES FLOTANTES -->
+<div class="float-container">
+  <a class="msg-float" href="https://m.me/61550080681411?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener" aria-label="Réserver par Messenger">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+    </svg>
+    <span class="float-label">Messenger</span>
+  </a>
+  <a class="wa-float" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener" aria-label="Réserver par WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.86 7.86 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.24 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.68Zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.19-.5.64-.62.78-.11.13-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4.09-.1.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.19-.68.66-.68 1.62s.7 1.88.8 2.01c.1.13 1.38 2.1 3.34 2.94.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23Z"/>
+    </svg>
+    <span class="float-label">WhatsApp</span>
+  </a>
+</div>
 
 <!-- JAVASCRIPT -->
 <script>
-  // ✅ URL de tu Apps Script (ya colocada aquí)
-  const API_URL = "https://script.google.com/macros/s/AKfycbwQbDvJ_I6Vs7JY5VAN2TyZZuPqc6D9HikiBYYZ8AZL3Iod4Z3Y2-eBkIfDNnM2XYoJ/exec";
-
-  async function envoyerFormulaire() {
-    const messageDiv = document.getElementById('messageReservation');
-    const btn = document.querySelector('.btn-submit-form');
-
-    const donnees = {
-      nom: document.getElementById('nom').value.trim(),
-      telephone: document.getElementById('telephone').value.trim(),
-      email: document.getElementById('email').value.trim(),
-      age: document.getElementById('age').value.trim(),
-      niveau: document.getElementById('niveau').value,
-      date: document.getElementById('date').value,
-      heure: document.getElementById('heure').value,
-      type: document.getElementById('type').value,
-      modalite: document.getElementById('modalite').value
-    };
-
-    if (!donnees.nom || !donnees.telephone) {
-      messageDiv.className = 'error';
-      messageDiv.textContent = '❌ Le nom et le téléphone sont obligatoires';
-      return;
-    }
-
-    btn.disabled = true;
-    btn.textContent = '⏳ Envoi en cours...';
-    messageDiv.className = 'loading';
-    messageDiv.textContent = '⏳ Envoi en cours...';
-
-    try {
-      await fetch(API_URL, {
-        method: 'POST',
-        mode: 'no-cors',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(donnees)
-      });
-
-      messageDiv.className = 'success';
-      messageDiv.textContent = '✅ Réservation envoyée avec succès ! Vous recevrez une confirmation par WhatsApp dans les 24h.';
-      document.getElementById('formReservation').reset();
-
-    } catch (error) {
-      messageDiv.className = 'error';
-      messageDiv.textContent = '❌ Une erreur est survenue. Veuillez réessayer.';
-      console.error(error);
-    }
-
-    btn.disabled = false;
-    btn.textContent = '📅 Réserver mon cours d\'essai';
-  }
-
   document.addEventListener('DOMContentLoaded', () => {
     const reveals = document.querySelectorAll('.reveal');
     const io = new IntersectionObserver((entries) => {
@@ -630,7 +586,6 @@
         }
       });
     }, { threshold: .15 });
-
     reveals.forEach((element) => io.observe(element));
   });
 </script>
