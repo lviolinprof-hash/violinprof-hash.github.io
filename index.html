@@ -363,28 +363,68 @@
 
     footer{ background:var(--teal-950); color:var(--on-dark-faint); padding:34px 0; font-size:.86rem; text-align:center; }
 
-    /* --- IMÁGENES DE SECCIÓN (mismo estilo que violin.jpg) --- */
-    .section-img-wrap {
+    /* --- IMÁGENES CON ESTILO HERO (CIRCULAR, BORDE DORADO) --- */
+    .section-img-hero {
+      display: flex;
+      justify-content: center;
+      align-items: center;
       margin: 32px 0 10px;
-      border-radius: 8px;
-      overflow: hidden;
-      border: 1px solid var(--paper-line);
-      box-shadow: 0 4px 20px rgba(6,44,49,.08);
     }
-    .section-img-wrap.dark {
-      border-color: rgba(231,200,11,.15);
-      box-shadow: 0 4px 30px rgba(0,0,0,.25);
+    .section-img-hero .seal-mini {
+      width: min(220px, 50vw);
+      aspect-ratio: 1;
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transform: rotate(-1deg);
     }
-    .section-img-wrap img {
-      width:100%;
-      height:auto;
-      display:block;
+    .section-img-hero .seal-circle-mini {
+      position: absolute;
+      inset: 8%;
+      border-radius: 50%;
+      border: 1px solid rgba(243, 220, 78, 0.4);
+      background: radial-gradient(circle at 38% 32%, rgba(19,111,121,0.15), rgba(6,44,49,0.05) 62%, transparent 70%);
+      box-shadow: 0 0 0 1px rgba(243, 220, 78, 0.06), 0 8px 30px rgba(0,0,0,0.08);
     }
-    .section-img-wrap.faq-img {
-      max-width:500px;
-      margin-left:auto;
-      margin-right:auto;
-      margin-bottom:28px;
+    .section-img-hero .seal-circle-mini::after {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 1px solid rgba(191,222,223,0.08);
+      border-radius: 50%;
+    }
+    .section-img-hero .img-mini {
+      position: absolute;
+      z-index: 2;
+      inset: 8%;
+      width: 84%;
+      height: 84%;
+      border-radius: 50%;
+      object-fit: cover;
+      filter: drop-shadow(0 6px 15px rgba(0,0,0,0.08)) brightness(1.02) contrast(1.02);
+      transition: transform 0.5s ease;
+    }
+    .section-img-hero .img-mini:hover {
+      transform: scale(1.03);
+    }
+
+    /* --- Variante para fondo oscuro (sección PARCOURS) --- */
+    .section-img-hero.dark .seal-circle-mini {
+      border-color: rgba(243, 220, 78, 0.35);
+      background: radial-gradient(circle at 38% 32%, rgba(19,111,121,0.2), rgba(6,44,49,0.1) 62%, transparent 70%);
+      box-shadow: 0 0 0 1px rgba(243, 220, 78, 0.05), 0 8px 35px rgba(0,0,0,0.3);
+    }
+    .section-img-hero.dark .seal-circle-mini::after {
+      border-color: rgba(191,222,223,0.06);
+    }
+    .section-img-hero.dark .img-mini {
+      filter: drop-shadow(0 6px 20px rgba(0,0,0,0.2)) brightness(1.02) contrast(1.02);
+    }
+
+    /* --- FAQ: imagen más pequeña --- */
+    .section-img-hero.faq .seal-mini {
+      width: min(160px, 40vw);
     }
 
     @media(max-width:860px){
@@ -395,6 +435,12 @@
       section{ padding:56px 0; }
       .form-reserva-section .form-row{
         grid-template-columns:1fr;
+      }
+      .section-img-hero .seal-mini {
+        width: min(180px, 55vw);
+      }
+      .section-img-hero.faq .seal-mini {
+        width: min(140px, 45vw);
       }
     }
     @media(max-width:760px){
@@ -463,10 +509,13 @@
       au lieu de la répéter 40 fois par réflexe.
     </p>
     <p>Résultat : pas deux ans à répéter des comptines. <mark>Un vrai morceau reconnaissable dès votre deuxième cours.</mark></p>
-    
-    <!-- Imagen sección Truth -->
-    <div class="section-img-wrap">
-      <img src="feliz.jpg" alt="Élève heureuse jouant du violon" loading="lazy">
+
+    <!-- Imagen estilo HERO - TRUTH -->
+    <div class="section-img-hero">
+      <div class="seal-mini">
+        <div class="seal-circle-mini"></div>
+        <img class="img-mini" src="feliz.jpg" alt="Élève heureuse jouant du violon" loading="lazy">
+      </div>
     </div>
 
     <div class="btn-center">
@@ -497,10 +546,13 @@
         <span class="peg-tag win">Vous y êtes</span>
       </div>
     </div>
-    
-    <!-- Imagen sección Parcours -->
-    <div class="section-img-wrap dark">
-      <img src="profesor.jpg" alt="Professeur de violon avec un élève" loading="lazy">
+
+    <!-- Imagen estilo HERO - PARCOURS (fondo oscuro) -->
+    <div class="section-img-hero dark">
+      <div class="seal-mini">
+        <div class="seal-circle-mini"></div>
+        <img class="img-mini" src="profesor.jpg" alt="Professeur de violon avec un élève" loading="lazy">
+      </div>
     </div>
 
     <div class="btn-center">
@@ -528,10 +580,13 @@
         <div class="who">Sophie, 36 ans — élève depuis 5 mois</div>
       </div>
     </div>
-    
-    <!-- Imagen sección Testimonios -->
-    <div class="section-img-wrap">
-      <img src="grupo.jpg" alt="Groupe d'élèves jouant du violon" loading="lazy">
+
+    <!-- Imagen estilo HERO - TESTIMONIOS -->
+    <div class="section-img-hero">
+      <div class="seal-mini">
+        <div class="seal-circle-mini"></div>
+        <img class="img-mini" src="grupo.jpg" alt="Groupe d'élèves jouant du violon" loading="lazy">
+      </div>
     </div>
 
     <div class="btn-center">
@@ -546,9 +601,12 @@
     <span class="eyebrow">Questions fréquentes</span>
     <h2 class="section-title" style="margin-top:14px;">Avant de réserver</h2>
 
-    <!-- Imagen sección FAQ -->
-    <div class="section-img-wrap faq-img">
-      <img src="detalle.jpg" alt="Détail d'un violon" loading="lazy">
+    <!-- Imagen estilo HERO - FAQ (más pequeña) -->
+    <div class="section-img-hero faq">
+      <div class="seal-mini">
+        <div class="seal-circle-mini"></div>
+        <img class="img-mini" src="detalle.jpg" alt="Détail d'un violon" loading="lazy">
+      </div>
     </div>
 
     <details open>
