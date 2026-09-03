@@ -241,7 +241,7 @@
       display:inline-flex;
       align-items:center;
       gap:10px;
-      background:var(--gold);        /* mismo amarillo que el resto */
+      background:var(--gold);
       color:var(--teal-950);
       padding:14px 20px;
       border-radius:50px;
@@ -341,7 +341,6 @@
       au lieu de la répéter 40 fois par réflexe.
     </p>
     <p>Résultat : pas deux ans à répéter des comptines. <mark>Un vrai morceau reconnaissable dès votre deuxième cours.</mark></p>
-    <!-- Botón eliminado -->
   </div>
 </section>
 
@@ -367,7 +366,6 @@
         <span class="peg-tag win">Vous y êtes</span>
       </div>
     </div>
-    <!-- Botón eliminado -->
   </div>
 </section>
 
@@ -390,7 +388,6 @@
         <div class="who">Sophie, 36 ans — élève depuis 5 mois</div>
       </div>
     </div>
-    <!-- Botón eliminado -->
   </div>
 </section>
 
@@ -419,7 +416,6 @@
       <summary>Où se déroulent les cours ? <span class="plus">+</span></summary>
       <p>Les cours peuvent avoir lieu à votre domicile ou dans le nôtre, avec un professeur. Des cours en ligne sont également possibles. Les cours en petit groupe ou en individuel sont proposés selon les disponibilités.</p>
     </details>
-    <!-- Botón eliminado -->
   </div>
 </section>
 
@@ -572,11 +568,8 @@
 
 <!-- JAVASCRIPT -->
 <script>
-  // ⚠️ PASO OBLIGATORIO ⚠️
-  // Reemplaza el texto de abajo por la URL de tu despliegue de Apps Script.
-  // Debe terminar en "/exec" (NO en "/dev").
-  // La obtienes en Apps Script > Implementar > Nueva implementación > Aplicación web.
-  const API_URL = "PEGA_AQUI_TU_URL_DE_APPS_SCRIPT";
+  // ✅ URL de tu Apps Script (ya colocada aquí)
+  const API_URL = "https://script.google.com/macros/s/AKfycbwQbDvJ_I6Vs7JY5VAN2TyZZuPqc6D9HikiBYYZ8AZL3Iod4Z3Y2-eBkIfDNnM2XYoJ/exec";
 
   async function envoyerFormulaire() {
     const messageDiv = document.getElementById('messageReservation');
@@ -597,13 +590,6 @@
     if (!donnees.nom || !donnees.telephone) {
       messageDiv.className = 'error';
       messageDiv.textContent = '❌ Le nom et le téléphone sont obligatoires';
-      return;
-    }
-
-    if (!API_URL || API_URL === "https://script.google.com/macros/s/AKfycbwQbDvJ_I6Vs7JY5VAN2TyZZuPqc6D9HikiBYYZ8AZL3Iod4Z3Y2-eBkIfDNnM2XYoJ/exec") {
-      messageDiv.className = 'error';
-      messageDiv.textContent = '⚠️ Configuration manquante : API_URL non définie (contactez l\'administrateur du site).';
-      console.error('API_URL no está configurada. Reemplázala por la URL de tu despliegue de Apps Script.');
       return;
     }
 
