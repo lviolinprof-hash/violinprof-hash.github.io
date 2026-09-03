@@ -1,30 +1,724 @@
-function doPost(e) {
-  try {
-    const data = JSON.parse(e.postData.contents);
-    const sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName("Reservas");
-    
-    // Si no existe la hoja, la crea
-    if (!sheet) {
-      SpreadsheetApp.getActiveSpreadsheet().insertSheet("Reservas");
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Violon, tout simplement — L'espace pour l'apprendre</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1000 1000'%3E%3Ccircle cx='500' cy='500' r='490' fill='%23301536'/%3E%3Csvg x='256' y='150' width='488' height='700' viewBox='0 0 234 336'%3E%3Cpath transform='translate(0,336) scale(0.1,-0.1)' fill='%23FFF7F0' d='M1781 3335c-85-19-202-75-262-126-99-83-215-264-273-427-46-128-71-319-106-796-6-77-15-145-21-152-6-7-20-14-31-16-31-4-32-23-4-36 24-11 25-12 20-119-30-752-39-830-124-1046-51-130-100-213-175-295-74-81-157-136-245-162-102-30-121-28-157 23-45 63-63 103-65 143-2 41 10 51 67 61 72 12 115 83 115 190 0 69-29 109-110 153-84 45-159 47-235 8-97-50-137-124-137-248 2-189 69-299 247-400 69-39 88-45 149-49 179-10 432 81 598 215 74 60 183 198 228 289 46 93 87 245 114 420 26 165 54 431 59 545 2 59 4 65 26 70 36 8 36 26 1 38-30 11-30 11-30 85 0 147 40 650 76 952 22 186 38 246 99 371 42 86 65 121 102 154 54 47 112 80 143 80 54 0 170-86 170-126 0-19-8-25-42-34-134-37-142-205-14-285 112-69 287-29 342 78 37 70 14 223-45 304-83 115-304 178-480 138z'/%3E%3C/svg%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fahkwang:wght@300;400;500;600;700&family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --teal-950:#062C31;
+      --teal-900:#0B5159;
+      --teal-700:#136F79;
+      --white:#FFFFFF;
+      --gold:#E7C80B;
+      --gold-light:#F3DC4E;
+      --paper:#F3FAFA;
+      --paper-line:#D3E7E7;
+      --ink:#0B5159;
+      --ink-soft:#4C7E82;
+      --on-dark:#FFFFFF;
+      --on-dark-soft:#BFDEDF;
+      --on-dark-faint:#8FB9BB;
+      --max:1100px;
+      --messenger-blue:#0084FF;
+      --messenger-blue-dark:#0063CC;
+      --whatsapp-green:#25D366;
+      --whatsapp-green-dark:#1DA851;
     }
-    
-    // Añadir fila con los datos
-    sheet.appendRow([
-      new Date(),
-      data.nom || "",
-      data.email || "",
-      data.telephone || "",
-      data.date || "",
-      data.horaire || ""
-    ]);
-    
-    return ContentService
-      .createTextOutput(JSON.stringify({ success: true }))
-      .setMimeType(ContentService.MimeType.JSON);
-      
-  } catch (error) {
-    return ContentService
-      .createTextOutput(JSON.stringify({ success: false, error: error.message }))
-      .setMimeType(ContentService.MimeType.JSON);
+    *{ box-sizing:border-box; }
+    html{ scroll-behavior:smooth; }
+    body{
+      margin:0;
+      font-family:'Public Sans',sans-serif;
+      color:var(--ink);
+      background:var(--white);
+      -webkit-font-smoothing:antialiased;
+    }
+    h1,h2,h3,.display{
+      font-family:'Fahkwang',sans-serif;
+      font-weight:600;
+      letter-spacing:-0.025em;
+      margin:0;
+    }
+    .wrap{ max-width:var(--max); margin:0 auto; padding:0 28px; }
+    a{ color:inherit; }
+    button{ font-family:inherit; }
+    a:focus-visible, button:focus-visible, input:focus-visible, select:focus-visible, summary:focus-visible{
+      outline:2px solid var(--gold);
+      outline-offset:3px;
+    }
+    .eyebrow{
+      text-transform:uppercase;
+      letter-spacing:0.18em;
+      font-size:12px;
+      font-weight:700;
+      color:var(--gold);
+    }
+    .hero{
+      background: radial-gradient(90% 120% at 15% -10%, var(--teal-700) 0%, var(--teal-900) 48%, var(--teal-950) 100%);
+      color:var(--on-dark);
+      padding:76px 0 70px;
+      position:relative;
+      overflow:hidden;
+    }
+    .hero .wrap{ position:relative; z-index:2; }
+    .hero-grid{ display:grid; grid-template-columns:1.08fr 0.92fr; gap:46px; align-items:center; }
+    .hero h1{
+      font-size:clamp(2.2rem,4vw,3.5rem);
+      line-height:1.08;
+      margin:18px 0 20px;
+      color:var(--on-dark);
+      max-width:720px;
+    }
+    .hero h1 em{ font-style:italic; color:var(--gold-light); }
+    .hero p.lede{
+      font-size:1.1rem;
+      line-height:1.65;
+      color:var(--on-dark-soft);
+      max-width:47ch;
+      margin:0 0 30px;
+    }
+    .cta-row{ display:flex; align-items:center; gap:18px; flex-wrap:wrap; }
+    .btn-primary{
+      background:var(--gold);
+      color:var(--teal-950);
+      border:none;
+      padding:16px 30px;
+      font-weight:700;
+      font-size:1.02rem;
+      border-radius:4px;
+      cursor:pointer;
+      transition: background .2s ease, transform .2s ease;
+      text-decoration:none;
+      display:inline-flex;
+      align-items:center;
+      font-family:'Fahkwang',sans-serif;
+    }
+    .btn-primary:hover{ background:var(--gold-light); transform:translateY(-1px); }
+    .micro-trust{ font-size:.92rem; color:var(--on-dark-faint); }
+    .micro-trust strong{ color:var(--gold-light); font-weight:600; }
+    .seal-wrap{ display:flex; align-items:center; justify-content:center; position:relative; min-height:380px; }
+    .seal{ width:min(390px,90%); aspect-ratio:1; position:relative; display:flex; align-items:center; justify-content:center; transform:rotate(-2deg); }
+    .seal-circle{
+      position:absolute; inset:8%; border-radius:50%;
+      border:1px solid rgba(243,220,78,.48);
+      background: radial-gradient(circle at 38% 32%, rgba(19,111,121,.35), rgba(6,44,49,.08) 62%, transparent 70%);
+      box-shadow: 0 0 0 1px rgba(243,220,78,.08), 0 20px 70px rgba(0,0,0,.18);
+    }
+    .seal-circle::after{ content:""; position:absolute; inset:14px; border:1px solid rgba(191,222,223,.11); border-radius:50%; }
+    .violon-image{
+      position:absolute; z-index:2; inset:8%; width:84%; height:84%; border-radius:50%;
+      object-fit:cover;
+      filter: drop-shadow(0 10px 20px rgba(0,0,0,.12)) brightness(1.05) contrast(1.02);
+      transition: transform 0.6s ease;
+    }
+    .violon-image:hover{ transform: scale(1.02); }
+    section{ padding:74px 0; }
+    .section-title{ font-size:clamp(1.65rem,3vw,2.35rem); margin-bottom:22px; line-height:1.18; }
+    .reveal{ opacity:0; transform:translateY(18px); transition: opacity .7s ease, transform .7s ease; }
+    .reveal.is-visible{ opacity:1; transform:none; }
+    .truth{ background:var(--white); }
+    .truth .wrap{ max-width:760px; }
+    .truth p{ font-size:1.14rem; line-height:1.75; color:#204A4E; margin:0 0 22px; }
+    .truth mark{ background:none; color:var(--teal-900); font-weight:600; border-bottom:2px solid var(--gold); }
+    .peg-section{ background: linear-gradient(180deg, var(--teal-950), var(--teal-900) 70%); color:var(--on-dark); }
+    .peg-section .eyebrow{ color:var(--gold-light); }
+    .peg-section .section-title{ color:var(--on-dark); max-width:640px; }
+    .pegboard{ margin-top:56px; display:grid; grid-template-columns:1fr auto 1fr; align-items:center; gap:0; }
+    .peg-card{ background:rgba(255,255,255,.06); border:1px solid rgba(231,200,11,.28); border-radius:6px; padding:30px 26px; position:relative; }
+    .peg-number{ font-family:'Fahkwang',sans-serif; font-size:.92rem; font-weight:600; color:var(--gold-light); letter-spacing:.06em; text-transform:uppercase; margin-bottom:10px; }
+    .peg-card h3{ font-size:1.5rem; color:var(--on-dark); margin-bottom:10px; }
+    .peg-card p{ color:var(--on-dark-soft); font-size:.98rem; line-height:1.55; margin:0; }
+    .peg-tag{ display:inline-block; margin-top:16px; font-size:.78rem; font-weight:700; letter-spacing:.06em; text-transform:uppercase; padding:5px 11px; border-radius:3px; }
+    .peg-tag.free{ background:var(--gold); color:var(--teal-950); }
+    .peg-tag.win{ background:transparent; border:1px solid var(--gold-light); color:var(--gold-light); }
+    .string-wrap{ display:flex; align-items:center; justify-content:center; padding:0 18px; }
+    .string-wrap svg{ width:70px; height:60px; overflow:visible; }
+    .string-line{ stroke:var(--gold-light); stroke-width:2; }
+    .pegboard:hover .string-line{ animation:vibrate .4s ease-in-out infinite; }
+    @keyframes vibrate{ 0%,100%{ transform:translateY(0);} 50%{ transform:translateY(-3px);} }
+    .quotes{ background:var(--paper); }
+    .quote-grid{ display:grid; grid-template-columns:repeat(3,1fr); gap:26px; margin-top:40px; }
+    .quote-card{ background:var(--white); border:1px solid var(--paper-line); border-radius:4px; padding:26px 24px; }
+    .quote-card p.text{ font-family:'Fahkwang',sans-serif; font-style:italic; font-size:1.06rem; line-height:1.55; color:var(--teal-900); margin:0 0 16px; }
+    .quote-card .who{ font-size:.86rem; color:var(--ink-soft); font-weight:600; }
+    .faq{ background:var(--white); }
+    .faq .wrap{ max-width:760px; }
+    details{ border-bottom:1px solid var(--paper-line); padding:20px 0; }
+    summary{ cursor:pointer; font-weight:600; font-size:1.06rem; list-style:none; display:flex; justify-content:space-between; align-items:center; gap:16px; color:var(--teal-900); }
+    summary::-webkit-details-marker{ display:none; }
+    summary .plus{ font-family:'Fahkwang',sans-serif; font-size:1.4rem; color:var(--gold); transition:transform .2s ease; }
+    details[open] summary .plus{ transform:rotate(45deg); }
+    details p{ margin:14px 0 0; color:var(--ink-soft); line-height:1.6; font-size:.98rem; }
+    .final{
+      background: radial-gradient(120% 160% at 85% 110%, var(--teal-700) 0%, var(--teal-950) 60%);
+      color:var(--on-dark);
+    }
+    .final-grid{ display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center; }
+    .final h2{ color:var(--on-dark); font-size:clamp(1.7rem,3vw,2.4rem); line-height:1.15; }
+    .final p.lede{ color:var(--on-dark-soft); font-size:1.05rem; line-height:1.6; max-width:44ch; margin-top:16px; }
+    .final-list{ margin-top:26px; padding:0; list-style:none; }
+    .final-list li{ display:flex; gap:12px; align-items:flex-start; color:var(--on-dark-soft); font-size:.96rem; margin-bottom:12px; }
+    .final-list li:before{ content:"—"; color:var(--gold-light); font-weight:700; flex-shrink:0; }
+    .wa-card{ background:rgba(255,255,255,.06); border:1px solid rgba(231,200,11,.28); border-radius:10px; padding:36px 32px; text-align:center; }
+    .wa-card .wa-eyebrow{ font-size:.82rem; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:var(--gold-light); margin-bottom:12px; }
+    .wa-card h3{ color:var(--on-dark); font-size:1.5rem; margin-bottom:10px; }
+    .wa-card p{ color:var(--on-dark-soft); font-size:.98rem; line-height:1.55; margin:0 0 26px; }
+
+    /* --- BOTONES DE WHATSAPP (VERDE) --- */
+    .btn-whatsapp{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      background:var(--whatsapp-green);
+      color:white;
+      border:none;
+      padding:16px 20px;
+      font-weight:700;
+      font-size:1.02rem;
+      border-radius:5px;
+      cursor:pointer;
+      text-decoration:none;
+      transition: background .2s ease, transform .2s ease;
+      font-family:'Fahkwang',sans-serif;
+    }
+    .btn-whatsapp:hover{ background:var(--whatsapp-green-dark); transform:translateY(-1px); }
+    .btn-whatsapp svg{ width:20px; height:20px; flex-shrink:0; }
+
+    /* --- BOTONES DE MESSENGER (AZUL) - MISMO TAMAÑO QUE WHATSAPP --- */
+    .btn-messenger{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap:10px;
+      width:100%;
+      background:var(--messenger-blue);
+      color:white;
+      border:none;
+      padding:16px 20px;
+      font-weight:700;
+      font-size:1.02rem;
+      border-radius:5px;
+      cursor:pointer;
+      text-decoration:none;
+      transition: background .2s ease, transform .2s ease;
+      font-family:'Fahkwang',sans-serif;
+    }
+    .btn-messenger:hover{ background:var(--messenger-blue-dark); transform:translateY(-1px); }
+    .btn-messenger svg{ width:20px; height:20px; flex-shrink:0; }
+
+    /* --- CONTENEDORES DE BOTONES --- */
+    .btn-group{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:10px;
+    }
+
+    .btn-group-row{
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      margin-top:10px;
+    }
+    .btn-group-row .btn-whatsapp,
+    .btn-group-row .btn-messenger{
+      width:100%;
+    }
+
+    /* --- BOTONES FLOTANTES --- */
+    .float-container{
+      position:fixed;
+      bottom:22px;
+      right:22px;
+      z-index:999;
+      display:flex;
+      flex-direction:column;
+      gap:12px;
+      align-items:flex-end;
+    }
+
+    .wa-float, .msg-float{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      padding:14px 20px;
+      border-radius:50px;
+      text-decoration:none;
+      font-family:'Fahkwang',sans-serif;
+      font-weight:600;
+      font-size:.92rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,.22);
+      transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+    }
+    .wa-float{
+      background:var(--whatsapp-green);
+      color:white;
+    }
+    .wa-float:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(0,0,0,.28);
+      background:var(--whatsapp-green-dark);
+    }
+    .wa-float svg{ width:22px; height:22px; flex-shrink:0; color:white; }
+
+    .msg-float{
+      background:var(--messenger-blue);
+      color:white;
+    }
+    .msg-float:hover{
+      transform:translateY(-2px);
+      box-shadow:0 12px 28px rgba(0,0,0,.28);
+      background:var(--messenger-blue-dark);
+    }
+    .msg-float svg{ width:22px; height:22px; flex-shrink:0; color:white; }
+
+    .float-label{ white-space:nowrap; }
+
+    @media(max-width:520px){
+      .float-label{ display:none; }
+      .wa-float, .msg-float{ padding:14px; border-radius:50%; }
+    }
+
+    .btn-center{
+      display:flex;
+      justify-content:center;
+      margin-top:30px;
+    }
+
+    /* --- ESTILOS DEL FORMULARIO DE RESERVA --- */
+    .form-reserva-section{
+      background:var(--paper);
+      padding:60px 20px;
+    }
+    .form-reserva-section .wrap{
+      max-width:600px;
+      margin:0 auto;
+    }
+    .form-reserva-section .form-group{
+      margin-bottom:18px;
+    }
+    .form-reserva-section .form-group label{
+      display:block;
+      font-weight:600;
+      margin-bottom:5px;
+      color:#0B5159;
+      font-size:0.92rem;
+    }
+    .form-reserva-section .form-group input,
+    .form-reserva-section .form-group select{
+      width:100%;
+      padding:12px 14px;
+      border:1.5px solid #D3E7E7;
+      border-radius:6px;
+      font-size:0.98rem;
+      font-family:'Public Sans',sans-serif;
+      background:white;
+      color:#0B5159;
+    }
+    .form-reserva-section .form-group input:focus,
+    .form-reserva-section .form-group select:focus{
+      outline:none;
+      border-color:#E7C80B;
+      box-shadow:0 0 0 3px rgba(231,200,11,0.15);
+    }
+    .form-reserva-section .form-row{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:15px;
+    }
+    .btn-submit-reserva{
+      background:#E7C80B;
+      color:#062C31;
+      border:none;
+      padding:16px 30px;
+      font-weight:700;
+      border-radius:6px;
+      cursor:pointer;
+      width:100%;
+      font-size:1.1rem;
+      font-family:'Fahkwang',sans-serif;
+      transition:background .2s ease;
+      margin-top:5px;
+    }
+    .btn-submit-reserva:hover{ background:#F3DC4E; }
+    #messageReserva{
+      margin-top:18px;
+      padding:12px 16px;
+      border-radius:6px;
+      display:none;
+      text-align:center;
+      font-weight:500;
+      font-size:0.95rem;
+    }
+    #messageReserva.success{ background:#d4edda; color:#155724; display:block; }
+    #messageReserva.error{ background:#f8d7da; color:#721c24; display:block; }
+    #messageReserva.loading{ background:#fff3cd; color:#856404; display:block; }
+
+    footer{ background:var(--teal-950); color:var(--on-dark-faint); padding:34px 0; font-size:.86rem; text-align:center; }
+
+    @media(max-width:860px){
+      .hero-grid, .final-grid{ grid-template-columns:1fr; }
+      .hero{ padding:56px 0 44px; }
+      .seal-wrap{ min-height:300px; margin-top:-10px; }
+      .seal{ width:min(320px,80vw); }
+      section{ padding:56px 0; }
+      .form-reserva-section .form-row{
+        grid-template-columns:1fr;
+      }
+    }
+    @media(max-width:760px){
+      .pegboard{ grid-template-columns:1fr; gap:18px; }
+      .string-wrap{ transform:rotate(90deg); padding:6px 0; }
+    }
+    @media(max-width:820px){
+      .quote-grid{ grid-template-columns:1fr; }
+    }
+    @media(max-width:600px){
+      .btn-group-row{
+        flex-direction:column;
+      }
+    }
+    @media(prefers-reduced-motion:reduce){
+      *, *::before, *::after{ animation:none !important; transition:none !important; }
+      .reveal{ opacity:1; transform:none; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Violon, tout simplement — L'espace pour l'apprendre</span>
+      <h1>« Je pensais qu'à 34 ans, <em>c'était trop tard.</em> »</h1>
+      <p class="lede">
+        Ce n'est pas votre âge qui vous freine.
+        C'est de n'avoir jamais trouvé une méthode pensée pour vous, à votre mesure.
+        Ici, on respecte votre rythme, votre emploi du temps, et surtout vos envies musicales.
+        Vous jouez un vrai morceau dès votre 2ᵉ cours.
+      </p>
+      <div class="cta-row">
+        <a class="btn-primary" href="#reserver">
+          Réserver mon cours d'essai gratuit
+        </a>
+      </div>
+      <p class="micro-trust" style="margin-top:16px;">
+        🎻 <strong>Cours 1 offert</strong> · à votre domicile ou dans le nôtre · sans engagement · places limitées
+      </p>
+    </div>
+
+    <div class="seal-wrap" aria-hidden="true">
+      <div class="seal">
+        <div class="seal-circle"></div>
+        <img class="violon-image" src="violin.jpg" alt="Violon joué à l'archet" loading="lazy">
+      </div>
+    </div>
+  </div>
+</header>
+
+<!-- TRUTH -->
+<section class="truth reveal">
+  <div class="wrap">
+    <span class="eyebrow">Ce que personne ne vous dit</span>
+    <h2 class="section-title" style="margin-top:14px;">
+      La plupart de nos élèves n'avaient <mark>jamais touché un instrument</mark> avant de commencer.
+    </h2>
+    <p>Pas de solfège appris à l'école, pas de piano dans le salon de leurs parents. Juste l'envie — et la peur d'avoir raté le coche.</p>
+    <p>
+      Ce qui change tout, ce n'est pas le talent inné.
+      C'est une méthode qui vous fait comprendre la musique avant de la jouer :
+      vous savez pourquoi une note sonne comme elle sonne,
+      au lieu de la répéter 40 fois par réflexe.
+    </p>
+    <p>Résultat : pas deux ans à répéter des comptines. <mark>Un vrai morceau reconnaissable dès votre deuxième cours.</mark></p>
+    <div class="btn-center">
+      <a class="btn-primary" href="#reserver">Réserver mon cours d'essai gratuit</a>
+    </div>
+  </div>
+</section>
+
+<!-- PARCOURS -->
+<section class="peg-section reveal">
+  <div class="wrap">
+    <span class="eyebrow">Le parcours</span>
+    <h2 class="section-title" style="margin-top:14px;">Deux cours. Un premier morceau. Zéro excuse.</h2>
+    <div class="pegboard">
+      <div class="peg-card">
+        <div class="peg-number">Cours 1</div>
+        <h3>Le cours d'essai</h3>
+        <p>Prise en main du violon, posture, <strong>archet, main gauche.</strong> Premières notes d'une pièce simple. Un professeur, votre rythme, aucune pression.</p>
+        <span class="peg-tag free">Gratuit</span>
+      </div>
+      <div class="string-wrap">
+        <svg viewBox="0 0 70 60"><line class="string-line" x1="4" y1="30" x2="66" y2="30" /></svg>
+      </div>
+      <div class="peg-card">
+        <div class="peg-number">Cours 2</div>
+        <h3>Votre premier morceau</h3>
+        <p>Une mélodie complète, reconnaissable, jouée du début à la fin. Le moment où "je ne suis pas doué·e" s'arrête.</p>
+        <span class="peg-tag win">Vous y êtes</span>
+      </div>
+    </div>
+    <div class="btn-center">
+      <a class="btn-primary" href="#reserver">Réserver mon cours d'essai gratuit</a>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="quotes reveal">
+  <div class="wrap">
+    <span class="eyebrow">Ils ont commencé après 30 ans</span>
+    <h2 class="section-title" style="margin-top:14px;">Aucun d'eux n'avait fait de musique avant.</h2>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <p class="text">« J'étais persuadée que mes doigts étaient trop raides pour ça. Au 2ᵉ cours, j'ai joué une vraie mélodie. »</p>
+        <div class="who">Nathalie, 53 ans — élève depuis 8 mois</div>
+      </div>
+      <div class="quote-card">
+        <p class="text">« Le cours d'essai gratuit m'a enlevé toute pression. Je pensais juste "tester", et je n'ai plus arrêté. »</p>
+        <div class="who">Léa, 13 ans — élève depuis 1 an</div>
+      </div>
+      <div class="quote-card">
+        <p class="text">« Personne ne m'a demandé si j'avais fait du solfège enfant. On a juste commencé, tout de suite. »</p>
+        <div class="who">Sophie, 36 ans — élève depuis 5 mois</div>
+      </div>
+    </div>
+    <div class="btn-center">
+      <a class="btn-primary" href="#reserver">Réserver mon cours d'essai gratuit</a>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq reveal">
+  <div class="wrap">
+    <span class="eyebrow">Questions fréquentes</span>
+    <h2 class="section-title" style="margin-top:14px;">Avant de réserver</h2>
+
+    <details open>
+      <summary>Je n'ai pas de violon, est-ce grave ? <span class="plus">+</span></summary>
+      <p>Non. Un violon est mis à disposition pour votre cours d'essai. Si vous continuez, nous vous aidons à en louer ou en acheter un adapté à votre budget.</p>
+    </details>
+
+    <details>
+      <summary>Je suis vraiment débutant·e, sans aucune base musicale. <span class="plus">+</span></summary>
+      <p>C'est le profil de la majorité de nos élèves adultes. La méthode part de zéro, sans supposer aucune expérience préalable.</p>
+    </details>
+
+    <details>
+      <summary>Est-ce que 34, 13 ou 55 ans, c'est trop tard ? <span class="plus">+</span></summary>
+      <p>Non. La souplesse des doigts s'entretient à tout âge. La méthode est pensée à votre mesure, adaptée à vos envies et à votre emploi du temps : c'est exactement ce qui rend l'apprentissage fluide et agréable.</p>
+    </details>
+
+    <details>
+      <summary>Où se déroulent les cours ? <span class="plus">+</span></summary>
+      <p>Les cours peuvent avoir lieu à votre domicile ou dans le nôtre, avec un professeur. Des cours en ligne sont également possibles. Les cours en petit groupe ou en individuel sont proposés selon les disponibilités.</p>
+    </details>
+    <div class="btn-center">
+      <a class="btn-primary" href="#reserver">Réserver mon cours d'essai gratuit</a>
+    </div>
+  </div>
+</section>
+
+<!-- FORMULARIO DE RESERVA -->
+<section class="form-reserva-section reveal" id="reserver">
+  <div class="wrap">
+    <span class="eyebrow" style="text-align:center; display:block;">Réservez votre cours</span>
+    <h2 class="section-title" style="text-align:center; margin-top:14px;">
+      🎻 Cours d'essai gratuit
+    </h2>
+    <p style="text-align:center; color:var(--ink-soft); font-size:1rem; margin-bottom:30px;">
+      Remplissez le formulaire et nous vous contacterons pour confirmer votre créneau.
+    </p>
+
+    <form id="formReserva" onsubmit="event.preventDefault(); envoyerReserva();">
+      <!-- Nom -->
+      <div class="form-group">
+        <label>Nom complet <span style="color: #E7C80B;">*</span></label>
+        <input id="nomReserva" type="text" placeholder="Ex: Nathalie Dupont" required>
+      </div>
+
+      <!-- Email -->
+      <div class="form-group">
+        <label>Email <span style="color: #E7C80B;">*</span></label>
+        <input id="emailReserva" type="email" placeholder="ex: nathalie@email.com" required>
+      </div>
+
+      <!-- Téléphone -->
+      <div class="form-group">
+        <label>Téléphone <span style="color: #E7C80B;">*</span></label>
+        <input id="telephoneReserva" type="tel" placeholder="Ex: 0612345678" required>
+      </div>
+
+      <!-- Día y Franja horaria -->
+      <div class="form-row">
+        <div class="form-group">
+          <label>Jour souhaité <span style="color: #E7C80B;">*</span></label>
+          <input id="dateReserva" type="date" required>
+        </div>
+        <div class="form-group">
+          <label>Franche horaire <span style="color: #E7C80B;">*</span></label>
+          <select id="horaireReserva" required>
+            <option value="">Choisissez...</option>
+            <option value="09:00-10:00">09:00 - 10:00</option>
+            <option value="10:00-11:00">10:00 - 11:00</option>
+            <option value="11:00-12:00">11:00 - 12:00</option>
+            <option value="14:00-15:00">14:00 - 15:00</option>
+            <option value="15:00-16:00">15:00 - 16:00</option>
+            <option value="16:00-17:00">16:00 - 17:00</option>
+            <option value="17:00-18:00">17:00 - 18:00</option>
+            <option value="18:00-19:00">18:00 - 19:00</option>
+          </select>
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit-reserva">
+        📅 Réserver mon cours d'essai
+      </button>
+      <div id="messageReserva"></div>
+      <p style="text-align:center; font-size:0.75rem; color:#8FB9BB; margin-top:12px;">
+        Vos données sont utilisées uniquement pour gérer votre réservation.
+      </p>
+    </form>
+  </div>
+</section>
+
+<!-- CTA FINAL (opcional, con botones WhatsApp/Messenger) -->
+<section class="final reveal" style="padding:40px 0;">
+  <div class="wrap" style="text-align:center;">
+    <p style="color:var(--on-dark-soft); font-size:1.1rem; margin-bottom:20px;">
+      Ou contactez-nous directement sur votre application préférée
+    </p>
+    <div style="display:flex; gap:16px; justify-content:center; flex-wrap:wrap; max-width:400px; margin:0 auto;">
+      <a class="btn-whatsapp" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener" style="flex:1; min-width:140px;">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:20px;height:20px;">
+          <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.86 7.86 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.24 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.68Zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.19-.5.64-.62.78-.11.13-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4.09-.1.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.19-.68.66-.68 1.62s.7 1.88.8 2.01c.1.13 1.38 2.1 3.34 2.94.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23Z"/>
+        </svg>
+        WhatsApp
+      </a>
+      <a class="btn-messenger" href="https://www.facebook.com/1284879941373350" target="_blank" rel="noopener" style="flex:1; min-width:140px;">
+        <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" style="width:20px;height:20px;">
+          <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+        </svg>
+        Messenger
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="wrap">
+    Violon, tout simplement — L'espace pour l'apprendre · Cours en présentiel ou en ligne
+  </div>
+</footer>
+
+<!-- BOTONES FLOTANTES: WHATSAPP ARRIBA, MESSENGER ABAJO -->
+<div class="float-container">
+  <a class="wa-float" href="https://wa.me/33783931284?text=Bonjour%20!%20Je%20souhaite%20r%C3%A9server%20mon%20cours%20d%27essai%20gratuit%20de%20violon%20%F0%9F%8E%BB" target="_blank" rel="noopener" aria-label="Réserver par WhatsApp">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M17.6 6.32A7.85 7.85 0 0 0 12.05 4a7.94 7.94 0 0 0-6.9 11.9L4 20l4.2-1.1a7.9 7.9 0 0 0 3.85 1h.01A7.94 7.94 0 0 0 20 12.06a7.86 7.86 0 0 0-2.4-5.74Zm-5.55 12.2h-.01a6.6 6.6 0 0 1-3.36-.92l-.24-.14-2.5.65.67-2.44-.16-.25a6.58 6.58 0 0 1 10.2-8.24 6.53 6.53 0 0 1 1.94 4.66 6.6 6.6 0 0 1-6.54 6.68Zm3.6-4.93c-.2-.1-1.17-.58-1.35-.64-.18-.07-.31-.1-.44.1-.13.19-.5.64-.62.78-.11.13-.23.15-.42.05a5.4 5.4 0 0 1-1.6-.98 6 6 0 0 1-1.1-1.37c-.12-.2 0-.3.09-.4.09-.1.2-.23.3-.35.1-.11.13-.19.2-.32.06-.13.03-.24-.02-.34-.05-.1-.44-1.06-.6-1.45-.16-.38-.32-.33-.44-.33h-.37c-.13 0-.34.05-.52.24-.18.19-.68.66-.68 1.62s.7 1.88.8 2.01c.1.13 1.38 2.1 3.34 2.94.47.2.83.32 1.12.41.47.15.9.13 1.24.08.38-.06 1.17-.48 1.33-.94.16-.46.16-.86.11-.94-.05-.08-.18-.13-.38-.23Z"/>
+    </svg>
+    <span class="float-label">WhatsApp</span>
+  </a>
+  <a class="msg-float" href="https://www.facebook.com/1284879941373350" target="_blank" rel="noopener" aria-label="Réserver par Messenger">
+    <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 2C6.477 2 2 6.477 2 12c0 2.957 1.383 5.672 3.658 7.441L4 22.5l3.886-1.327A9.95 9.95 0 0 0 12 22c5.523 0 10-4.477 10-10S17.523 2 12 2zm.5 14.5L10 13.5l-3.5 2.5 5-5.5L13 12.5l3.5-2.5-5 5.5z"/>
+    </svg>
+    <span class="float-label">Messenger</span>
+  </a>
+</div>
+
+<!-- JAVASCRIPT -->
+<script>
+  // ✅ URL de tu Apps Script (debes reemplazarla por la tuya)
+  const API_URL = "https://script.google.com/macros/s/TU_URL_DE_APPS_SCRIPT/exec";
+
+  // Función para enviar el formulario de reserva
+  async function envoyerReserva() {
+    const messageDiv = document.getElementById('messageReserva');
+    const btn = document.querySelector('.btn-submit-reserva');
+
+    const donnees = {
+      nom: document.getElementById('nomReserva').value.trim(),
+      email: document.getElementById('emailReserva').value.trim(),
+      telephone: document.getElementById('telephoneReserva').value.trim(),
+      date: document.getElementById('dateReserva').value,
+      horaire: document.getElementById('horaireReserva').value
+    };
+
+    // Validaciones
+    if (!donnees.nom || !donnees.email || !donnees.telephone || !donnees.date || !donnees.horaire) {
+      messageDiv.className = 'error';
+      messageDiv.textContent = '❌ Tous les champs sont obligatoires.';
+      messageDiv.style.display = 'block';
+      return;
+    }
+
+    if (!donnees.email.includes('@')) {
+      messageDiv.className = 'error';
+      messageDiv.textContent = '❌ Veuillez entrer un email valide.';
+      messageDiv.style.display = 'block';
+      return;
+    }
+
+    // Deshabilitar botón y mostrar loading
+    btn.disabled = true;
+    btn.textContent = '⏳ Envoi en cours...';
+    messageDiv.className = 'loading';
+    messageDiv.textContent = '⏳ Envoi en cours...';
+    messageDiv.style.display = 'block';
+
+    try {
+      const response = await fetch(API_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(donnees)
+      });
+
+      if (response.ok) {
+        messageDiv.className = 'success';
+        messageDiv.textContent = '✅ Réservation envoyée ! Nous vous confirmerons le créneau par email ou téléphone sous 24h.';
+        document.getElementById('formReserva').reset();
+      } else {
+        const errorText = await response.text();
+        messageDiv.className = 'error';
+        messageDiv.textContent = '❌ Erreur: ' + (errorText || 'Veuillez réessayer.');
+      }
+    } catch (error) {
+      console.error('Erreur:', error);
+      messageDiv.className = 'error';
+      messageDiv.textContent = '❌ Erreur de connexion. Vérifiez votre connexion internet.';
+    }
+
+    // Restaurar botón
+    btn.disabled = false;
+    btn.textContent = '📅 Réserver mon cours d\'essai';
   }
-}
+
+  // Animaciones al hacer scroll
+  document.addEventListener('DOMContentLoaded', () => {
+    const reveals = document.querySelectorAll('.reveal');
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if(entry.isIntersecting){
+          entry.target.classList.add('is-visible');
+          io.unobserve(entry.target);
+        }
+      });
+    }, { threshold: .15 });
+    reveals.forEach((element) => io.observe(element));
+  });
+</script>
+
+</body>
+</html>
